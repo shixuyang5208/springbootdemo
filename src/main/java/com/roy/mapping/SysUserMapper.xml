@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roy.dao.SysUserDao">
+    <!-- 结果映射 -->
+    <resultMap type="SysUser" id="SelRM1">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+
+        <association property="dept" javaType="SysDept">
+            <id property="id" column="DEPT_ID"/>
+            <result property="name" column="DEPT_NAME"/>
+        </association>
+    </resultMap>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultMap="SelRM1" parameterType="Map">
+		SELECT
+                SU.`id`,
+                SU.`name`,
+                SD.`id` AS dept_id,
+                SD.`name` AS dept_name
+          FROM SYSUSER SU
+         INNER JOIN SYSDEPT SD ON SU.`deptid`=SD.`id`
+         ORDER BY SU.ID DESC
+	</select>
+
+    <!-- 查询总数 -->
+    <select id="findCount" resultType="long" parameterType="Map">
+  		SELECT COUNT(ID) FROM SYSUSER
+  	</select>
+</mapper>
